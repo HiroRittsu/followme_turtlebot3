@@ -32,3 +32,11 @@ if(BUILD_TESTING)
 endif()
 
 ament_package()
+
+add_executable(cpp_code src/ros2_cpp_code.cpp)
+ament_target_dependencies(cpp_code rclcpp)
+
+install(TARGETS
+    cpp_code
+    DESTINATION lib/${PROJECT_NAME}
+)
