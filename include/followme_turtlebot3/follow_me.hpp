@@ -16,9 +16,13 @@ public:
     }
 
 private:
-    void scanCallback(const sensor_msgs::msg::LaserScan::ConstSharedPtr msg) const {
-        for (auto range: msg->ranges) {
-            std::cout << range << '\n';
+    void scanCallback(const sensor_msgs::msg::LaserScan::ConstSharedPtr msgs) const {
+        float rad = msgs->angle_min;
+        std::vector<std::pair<float, float>> positions;
+
+        for (const auto &range: msgs->ranges) {
+            positions.emplace_back(range * std::sin(rad) * 100, -range * std::cos(rad) * 100);
+            rad += msgs->angle_increment;
         }
     }
 };
