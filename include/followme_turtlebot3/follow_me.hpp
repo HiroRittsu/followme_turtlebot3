@@ -12,7 +12,7 @@ class FollowMe : public rclcpp::Node {
 public:
     FollowMe() : Node("follow_me") {
 
-        auto callbackScan = [this](const sensor_msgs::msg::LaserScan::UniquePtr msgs) -> void {
+        auto onScan = [this](const sensor_msgs::msg::LaserScan::UniquePtr msgs) -> void {
             this->positions.clear();
             float rad = msgs->angle_min;
             for (const auto &range: msgs->ranges) {
@@ -22,12 +22,12 @@ public:
         };
 
         rclcpp::QoS qos(rclcpp::KeepLast(10));
-        this->sub_ = create_subscription<sensor_msgs::msg::LaserScan>("scan", qos, callbackScan);
+        this->subScan = create_subscription<sensor_msgs::msg::LaserScan>("scan", qos, onScan);
     }
 
     void calc();
 
 private:
-    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sub_;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr subScan;
     std::vector<std::pair<float, float>> positions;
 };
