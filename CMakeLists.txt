@@ -22,17 +22,12 @@ find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-if (BUILD_TESTING)
-    find_package(ament_lint_auto REQUIRED)
-    ament_lint_auto_find_test_dependencies()
-endif ()
+add_executable(follow_me src/follow_me.cpp include/followme_turtlebot3/follow_me.hpp)
+ament_target_dependencies(follow_me rclcpp sensor_msgs)
+install(TARGETS follow_me DESTINATION lib/${PROJECT_NAME})
+
+# Install launch directory
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 
 ament_package()
 
-add_executable(follow_me src/follow_me.cpp include/followme_turtlebot3/follow_me.hpp)
-ament_target_dependencies(follow_me rclcpp sensor_msgs)
-
-install(TARGETS
-        follow_me
-        DESTINATION lib/${PROJECT_NAME}
-        )
